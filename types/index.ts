@@ -1403,6 +1403,8 @@ export interface VisibilityCondition {
   // even before an input is linked. Absent on conditions created before this
   // existed — those fall back to linked-state/custom inference.
   dateInput?: boolean;
+  // Same as `dateInput`, but for the second bound (`is_between`).
+  dateInput2?: boolean;
 }
 
 export interface VisibilityConditionGroup {
