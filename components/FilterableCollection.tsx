@@ -88,7 +88,12 @@ export default function FilterableCollection({
   // live server on mount so the list always reflects the real "today" (and stays
   // consistent with the server-side search/filter, which re-resolves it fresh).
   const hasDynamicDateFilter = hasDynamicDateRule(filters);
-  const pendingFirstEvalRef = useRef(hasInputLinkedFilters || hasDynamicDateFilter);
+  // Input-linked filters (e.g. a URL-driven search) hide the SSR list up front so
+  // we don't flash the full list before narrowing it. A date-only reconcile keeps
+  // the SSR list visible and relies on the loading dim (`isFiltering` opacity)
+  // instead — showing the current list while it updates avoids a blank flash
+  // before the reconciled list arrives.
+  const pendingFirstEvalRef = useRef(hasInputLinkedFilters);
 
   const [filteredPage, setFilteredPage] = useState(1);
   const [filteredTotalPages, setFilteredTotalPages] = useState(1);
